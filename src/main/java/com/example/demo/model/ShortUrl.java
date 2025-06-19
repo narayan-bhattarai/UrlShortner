@@ -4,22 +4,23 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "short_url") // Explicit table name matching your SQL schema
 public class ShortUrl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "short_code", nullable = false, unique = true, length = 255)
     private String shortCode;
 
-    @Column(nullable = false)
+    @Column(name = "original_url", nullable = false, columnDefinition = "NVARCHAR(MAX)")
     private String originalUrl;
 
+    @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and Setters
-     // Getter and setter for id
     public Long getId() {
         return id;
     }
@@ -28,7 +29,6 @@ public class ShortUrl {
         this.id = id;
     }
 
-    // Getter and setter for originalUrl
     public String getOriginalUrl() {
         return originalUrl;
     }
@@ -37,12 +37,19 @@ public class ShortUrl {
         this.originalUrl = originalUrl;
     }
 
-    // Getter and setter for shortCode
     public String getShortCode() {
         return shortCode;
     }
 
     public void setShortCode(String shortCode) {
         this.shortCode = shortCode;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 }
