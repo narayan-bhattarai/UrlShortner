@@ -1,4 +1,4 @@
-# 🔗 URL Shortener App 🚀
+# 🔗 URL Shortener App (XotoURL: In Nepali xoto(chhoto) means Short)🚀
 
 A minimal and efficient **URL Shortener Web Application** built with **Java Spring Boot**, **JPA**, and **Swagger**. It takes a long URL and returns a 7-character **alphanumeric** short URL that you can share easily! 🧩
 
