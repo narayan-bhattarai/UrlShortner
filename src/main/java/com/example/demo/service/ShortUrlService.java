@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
+import com.example.demo.dto.ShortUrlResponse;
 import com.example.demo.model.ShortUrl;
 import com.example.demo.repository.ShortUrlRepository;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -12,12 +15,15 @@ public class ShortUrlService {
     
     private final ShortUrlRepository repository;
     private final Random random = new Random();
-    
-    public ShortUrlService(ShortUrlRepository repository) {
+    private final String baseUrl;
+
+    public ShortUrlService(ShortUrlRepository repository,    
+                        @Value("${app.short-url-prefix}") String baseUrl) {
         this.repository = repository;
+        this.baseUrl = baseUrl;
     }
     
-    public ShortUrl shortenUrl(String originalUrl) {
+    public ShortUrlResponse shortenUrl(String originalUrl) {
         String shortCode;
         do {
             shortCode = generateShortCode();
@@ -26,8 +32,8 @@ public class ShortUrlService {
         ShortUrl shortUrl = new ShortUrl();
         shortUrl.setOriginalUrl(originalUrl);
         shortUrl.setShortCode(shortCode);
-        
-        return repository.save(shortUrl);
+        repository.save(shortUrl);
+          return new ShortUrlResponse(originalUrl, baseUrl + "/" + shortCode);
     }
     
     public Optional<ShortUrl> getOriginalUrl(String shortCode) {
@@ -41,6 +47,7 @@ public class ShortUrlService {
         for (int i = 0; i < 6; i++) {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
+        
         return sb.toString();
     }
 }

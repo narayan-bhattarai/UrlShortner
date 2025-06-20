@@ -1,10 +1,10 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.ShortUrlResponse;
 import com.example.demo.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.demo.model.ShortUrl;
 import com.example.demo.service.ShortUrlService;
 
 @RestController
@@ -16,8 +16,8 @@ public class ShortUrlController {
         this.service = service;
     }
 
-    @PostMapping("/shorten")
-    public ResponseEntity<ShortUrl> shorten(@RequestParam String url) {
+    @PostMapping("/api/shorten")
+    public ResponseEntity<ShortUrlResponse> shorten(@RequestParam String url) {
         try {
             return ResponseEntity.ok(service.shortenUrl(url));
         } catch (IllegalArgumentException e) {
@@ -25,12 +25,13 @@ public class ShortUrlController {
         }
     }
 
-    @GetMapping("/{code}")
-    public ResponseEntity<String> redirect(@PathVariable String code) {
-        return service.getOriginalUrl(code)
-                .map(shortUrl -> ResponseEntity.status(HttpStatus.FOUND)
-                        .header("Location", shortUrl.getOriginalUrl())
-                        .body(""))
-                .orElseThrow(() -> new ResourceNotFoundException("Short URL not found for code: " + code));
+    @GetMapping("/api/redirect/{shortenedUrl}")
+   public ResponseEntity<String> redirect(@PathVariable String shortenedUrl) {
+     return service.getOriginalUrl(shortenedUrl)
+        .map(shortUrl -> ResponseEntity.status(HttpStatus.FOUND)
+            .header("Location", shortUrl.getOriginalUrl())
+            .body(""))
+        .orElseThrow(() -> new ResourceNotFoundException("Short URL not found for code: " + shortenedUrl));
     }
+
 }
