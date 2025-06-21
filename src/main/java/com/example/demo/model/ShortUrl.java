@@ -4,20 +4,20 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "short_url") // Explicit table name matching your SQL schema
+@Table(name = "ShortUrl") // Explicit table name matching your SQL schema
 public class ShortUrl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "short_code", nullable = false, unique = true, length = 255)
+    @Column(name = "ShortCode", nullable = false, unique = true, length = 10)
     private String shortCode;
 
-    @Column(name = "original_url", nullable = false, columnDefinition = "NVARCHAR(MAX)")
+    @Column(name = "OriginalUrl", nullable = false, unique = true, length = 2048)
     private String originalUrl;
 
-    @Column(name = "created_at")
+    @Column(name = "CreatedAt")
     private LocalDateTime createdAt = LocalDateTime.now();
 
     // Getters and Setters

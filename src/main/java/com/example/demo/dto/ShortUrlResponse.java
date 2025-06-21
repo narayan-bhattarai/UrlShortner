@@ -2,7 +2,7 @@ package com.example.demo.dto;
 
 public class ShortUrlResponse {
     private final String originalUrl;
-    private final String shortUrl;  // Will contain "xotoLink.io/abC234"
+    private final String shortUrl;  
     
     public ShortUrlResponse(String originalUrl, String shortUrl) {
         this.originalUrl = originalUrl;

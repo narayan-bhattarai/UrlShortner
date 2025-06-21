@@ -12,7 +12,6 @@ import java.util.Random;
 
 @Service
 public class ShortUrlService {
-    
     private final ShortUrlRepository repository;
     private final Random random = new Random();
     private final String baseUrl;
@@ -24,6 +23,22 @@ public class ShortUrlService {
     }
     
     public ShortUrlResponse shortenUrl(String originalUrl) {
+    
+        originalUrl = originalUrl.trim();
+        if (originalUrl.endsWith("/")) {
+            originalUrl = originalUrl.substring(0, originalUrl.length() - 1);
+        }
+
+       Optional<ShortUrl> existingUrl = repository.findByOriginalUrl(originalUrl);
+        
+        if (existingUrl.isPresent()) {
+            ShortUrl url = existingUrl.get();
+            return new ShortUrlResponse(
+                url.getOriginalUrl(),
+                baseUrl + "/" + url.getShortCode()
+            );
+        }
+        
         String shortCode;
         do {
             shortCode = generateShortCode();
@@ -33,7 +48,11 @@ public class ShortUrlService {
         shortUrl.setOriginalUrl(originalUrl);
         shortUrl.setShortCode(shortCode);
         repository.save(shortUrl);
-          return new ShortUrlResponse(originalUrl, baseUrl + "/" + shortCode);
+        
+        return new ShortUrlResponse(
+            originalUrl,
+            baseUrl + "/" + shortCode
+        );
     }
     
     public Optional<ShortUrl> getOriginalUrl(String shortCode) {
@@ -41,13 +60,11 @@ public class ShortUrlService {
     }
     
     private String generateShortCode() {
-        // Generate a 6-character alphanumeric code
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789$€£¥₹₽₩₪₫&@#%-_";
         StringBuilder sb = new StringBuilder(6);
         for (int i = 0; i < 6; i++) {
             sb.append(chars.charAt(random.nextInt(chars.length())));
         }
-        
         return sb.toString();
     }
 }

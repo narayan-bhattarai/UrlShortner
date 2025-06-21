@@ -1,8 +1,8 @@
-CREATE TABLE short_url (
-    id BIGINT IDENTITY PRIMARY KEY,
-    short_code NVARCHAR(255) NOT NULL UNIQUE,
-    original_url NVARCHAR(MAX) NOT NULL,
-    created_at DATETIME
+CREATE TABLE "ShortUrl" (
+    "Id" BIGINT IDENTITY PRIMARY KEY,
+    "ShortCode" NVARCHAR(10) NOT NULL UNIQUE,
+    "OriginalUrl" NVARCHAR(2048) NOT NULL UNIQUE,
+    "CreatedAt" DATETIME
 );
 
-CREATE INDEX idx_short_code ON short_url(short_code);
+CREATE INDEX idx_short_code ON "ShortUrl"("ShortCode");
